@@ -1,14 +1,13 @@
+import * as Joi from '@hapi/joi';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import * as Joi from '@hapi/joi';
-import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import { PostModule } from './modules/post/post.module';
-import { CategoryModule } from './modules/category/category.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AccessControlModule } from 'nest-access-control';
-import { roles } from './modules/auth/role.module';
+import { CategoryModule } from './modules/category/category.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { PostModule } from './modules/post/post.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,7 +26,7 @@ import { roles } from './modules/auth/role.module';
     PostModule,
     CategoryModule,
     AuthModule,
-    AccessControlModule.forRoles(roles),
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

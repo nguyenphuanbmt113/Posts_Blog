@@ -6,9 +6,11 @@ import { User } from 'src/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './guards/jwt-stragety';
+import { PostModule } from '../post/post.module';
 
 @Module({
   imports: [
+    PostModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: 'secretStringThatNoOneCanGuess',
@@ -23,5 +25,6 @@ import { JwtStrategy } from './guards/jwt-stragety';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

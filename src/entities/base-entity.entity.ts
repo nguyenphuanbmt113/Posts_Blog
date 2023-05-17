@@ -12,9 +12,6 @@ class BaseClassEntity extends BaseEntity {
 
   @CreateDateColumn({ nullable: true })
   updatedAt: Date;
-
-  @DeleteDateColumn({ nullable: true })
-  deletedAt: Date;
 }
 
 export default BaseClassEntity;

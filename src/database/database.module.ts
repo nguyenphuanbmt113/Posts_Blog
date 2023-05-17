@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Post } from 'src/entities/post.entity';
 import { Category } from 'src/entities/category.entity';
 import { User } from 'src/entities/user.entity';
+import { Comment } from 'src/entities/comment.entity';
+import { Like } from 'src/entities/like.entity';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { User } from 'src/entities/user.entity';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [Post, Category, User],
+        entities: [Post, Category, User, Like, Comment],
         synchronize: true,
       }),
     }),

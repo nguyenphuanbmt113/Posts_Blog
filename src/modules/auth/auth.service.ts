@@ -10,11 +10,14 @@ import { UserLoginDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/register-user.dto';
+import { PostService } from '../post/post.service';
+import { Comment } from 'src/entities/comment.entity';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private jwt: JwtService,
+    private postService: PostService,
   ) {}
 
   async login(loginDto: UserLoginDto) {
@@ -51,7 +54,7 @@ export class AuthService {
       user.lastname = lastname;
       user.email = email;
       user.password = password;
-      user.profilePic = profilePic;
+      user.image = profilePic;
 
       this.userRepo.create(user);
       await this.userRepo.save(user);
@@ -68,5 +71,13 @@ export class AuthService {
     return await this.userRepo.findOne({
       where: { id },
     });
+  }
+
+  async addCommenttoPost(userId: number, postId: number, content: string) {
+    const comment = new Comment();
+    comment.content = content;
+    comment.userId = userId;
+    comment.postId = postId;
+    await comment.save();
   }
 }

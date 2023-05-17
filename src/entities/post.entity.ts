@@ -4,14 +4,18 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { User } from './user.entity';
 import slugify from 'slugify';
 import { Category } from './category.entity';
+import BaseClassEntity from './base-entity.entity';
+import { Like } from './like.entity';
+import { Comment } from './comment.entity';
 @Entity('posts')
-export class Post {
+export class Post extends BaseClassEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -68,4 +72,16 @@ export class Post {
       lower: true,
     });
   }
+
+  @OneToMany(() => Comment, (comment: Comment) => comment.post, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  comments: Comment[];
+
+  @OneToMany(() => Like, (like: Like) => like.post, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  likes: Like[];
 }

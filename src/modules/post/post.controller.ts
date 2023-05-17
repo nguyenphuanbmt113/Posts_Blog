@@ -22,7 +22,6 @@ import { CurrentUser } from '../auth/decor/user.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
-import { ACGuard, UseRoles } from 'nest-access-control';
 
 @Controller('post')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -30,12 +29,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post('create')
-  @UseGuards(AuthGuard('jwt'), ACGuard)
-  @UseRoles({
-    resource: 'posts',
-    action: 'create',
-    possession: 'any',
-  })
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() createPostDto: CreatePostDto, @CurrentUser() user: User) {
     return this.postService.create(createPostDto, user);
   }
@@ -76,7 +70,6 @@ export class PostController {
     }),
   )
   uploadPhoto(@UploadedFile() file: Express.Multer.File) {
-    console.log('file:', file);
     if (!file) {
       throw new BadGatewayException('file is not an image');
     } else {

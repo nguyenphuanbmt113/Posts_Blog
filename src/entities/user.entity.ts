@@ -7,11 +7,14 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
-import { UserRoles } from 'src/modules/auth/role.module';
-// import { Post } from '../../post/entities/post.entity';
-// import { UserRoles } from '../../models/user-roles.models';
-
-@Entity('users')
+import { UserRoles } from 'src/modules/auth/role.enum';
+import { Like } from './like.entity';
+import { Comment } from './comment.entity';
+export enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,13 +32,14 @@ export class User {
   password: string;
 
   @Column({ default: null, nullable: true })
-  profilePic: string;
+  image: string;
 
   @Column({
     type: 'enum',
     enum: UserRoles,
     enumName: 'roles',
-    default: UserRoles.Reader,
+    default: [UserRoles.Reader],
+    array: true,
   })
   roles: UserRoles;
 
@@ -46,4 +50,14 @@ export class User {
   hashPass() {
     this.password = bcryptjs.hashSync(this.password, 10);
   }
+
+  @OneToMany(() => Like, (like) => like.user, {
+    nullable: true,
+  })
+  likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    nullable: true,
+  })
+  comments: Comment[];
 }
